@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Cloner le dépôt
-RUN git clone https://github.com/Florian-BARRE/open-webui-confidentiality.git /app
+ADD https://github.com/Florian-BARRE/open-webui-confidentiality.git /app/
 
 # Étape 2 : Configuration du frontend
 WORKDIR /app/
@@ -41,4 +41,5 @@ EXPOSE 5173 8080
 WORKDIR /app/
 
 # Étape 5 : Commande pour démarrer le frontend et le backend
+RUN chmod +x start.sh
 CMD ["/app/start.sh"]
