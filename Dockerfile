@@ -38,5 +38,7 @@ RUN /opt/conda/envs/open-webui/bin/pip install -r requirements.txt -U
 # Étape 4 : Exposer les ports nécessaires
 EXPOSE 5173 8080
 
+WORKDIR /app/
+
 # Étape 5 : Commande pour démarrer le frontend et le backend
-CMD ["bash", "-c", "npm run dev & sh dev.sh"]
+CMD ["/app/start.sh"]
