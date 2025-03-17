@@ -9,8 +9,8 @@ sleep 5
 
 # Initialize conda and activate the backend environment
 echo "Initializing conda and activating the backend environment..."
-conda init bash
 source ~/.bashrc
+conda init bash
 conda activate open-webui
 
 # Navigate to the backend directory and start the backend server
