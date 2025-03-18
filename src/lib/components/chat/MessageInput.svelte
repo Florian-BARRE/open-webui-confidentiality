@@ -1227,6 +1227,8 @@
 													</Tooltip>
 												{/if}
 
+												<!--$.^$ ici c'est l'endroit ou ajouter le bouton de confidentialité--> 
+
 											{/if}
 										</div>
 									</div>
