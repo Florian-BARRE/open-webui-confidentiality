@@ -36,8 +36,6 @@
 		chatTitle,
 		showArtifacts,
 		tools,
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		isConfidentialEnable, isCurrentChatConfidential
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -713,8 +711,6 @@
 		history = {
 			messages: {},
 			currentId: null,
-			// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-			is_confidential: $isConfidentialEnable
 		};
 
 		chatFiles = [];
@@ -883,9 +879,6 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
-				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-				history.is_confidential = $isCurrentChatConfidential;
-
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -941,9 +934,6 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
-				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-				history.is_confidential = $isCurrentChatConfidential;
-
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -1080,10 +1070,6 @@
 		}
 
 		history.currentId = currentParentId;
-
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		history.is_confidential = $isConfidentialEnable;
-
 		await tick();
 
 		if (autoScroll) {
@@ -1192,10 +1178,6 @@
 		if (usage) {
 			message.usage = usage;
 		}
-
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		history.is_confidential = $isConfidentialEnable;
-
 		history.messages[message.id] = message;
 
 		if (done) {
@@ -1418,8 +1400,6 @@
 		_history = JSON.parse(JSON.stringify(history));
 		// Save chat after all messages have been created
 		
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		_history.is_confidential = $isConfidentialEnable; // Add confidentiality to the chat history
 		await saveChatHandler(_chatId, _history);
 
 		await Promise.all(
@@ -1854,9 +1834,6 @@
 		let _chatId = $chatId;
 
 		if (!$temporaryChatEnabled) {
-			// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-			history.is_confidential = $isConfidentialEnable; // Add confidentiality to the chat history
-
 			chat = await createNewChat(localStorage.token, {
 				id: _chatId,
 				title: $i18n.t('New Chat'),
@@ -1888,9 +1865,6 @@
 	const saveChatHandler = async (_chatId, history) => {
 		if ($chatId == _chatId) {
 			if (!$temporaryChatEnabled) {
-				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-				history.is_confidential = $isConfidentialEnable;
-				
 				chat = await updateChatById(localStorage.token, _chatId, {
 					models: selectedModels,
 					history: history,

@@ -19,8 +19,6 @@
 		user as _user,
 		showControls,
 		TTSWorker,
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		isCurrentChatConfidential, isConfidentialEnable 
 	} from '$lib/stores';
 
 	import { blobToFile, compressImage, createMessagesList, findWordIndices } from '$lib/utils';
@@ -47,9 +45,6 @@
 	import PhotoSolid from '../icons/PhotoSolid.svelte';
 	import Photo from '../icons/Photo.svelte';
 	import CommandLine from '../icons/CommandLine.svelte';
-	// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-	import Confidential from '../icons/Confidential.svelte';
-
 	import { KokoroWorker } from '$lib/workers/KokoroWorker';
 
 	const i18n = getContext('i18n');
