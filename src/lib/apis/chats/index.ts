@@ -468,7 +468,7 @@ export const getChatById = async (token: string, id: string) => {
 	if (error) {
 		throw error;
 	}
-
+	console.log("$. INDEX.ts getChatById -> chat", res)
 	return res;
 };
 
@@ -792,7 +792,8 @@ export const deleteSharedChatById = async (token: string, id: string) => {
 
 export const updateChatById = async (token: string, id: string, chat: object) => {
 	let error = null;
-
+	console.log("$. INDEX.ts updateChatById -> chat", chat)
+	console.log("Stack trace:", new Error().stack);
 	const res = await fetch(`${WEBUI_API_BASE_URL}/chats/${id}`, {
 		method: 'POST',
 		headers: {

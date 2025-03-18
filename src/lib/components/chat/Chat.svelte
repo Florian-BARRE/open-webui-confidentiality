@@ -36,8 +36,7 @@
 		chatTitle,
 		showArtifacts,
 		tools,
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		isConfidentialEnable, isCurrentChatConfidential
+		isConfidentialEnabled
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -455,6 +454,8 @@
 	});
 
 	onDestroy(() => {
+		console.log('Destroy');
+
 		chatIdUnsubscriber?.();
 		window.removeEventListener('message', onMessageHandler);
 		$socket?.off('chat-events', chatEventHandler);
@@ -783,7 +784,7 @@
 			await goto('/');
 			return null;
 		});
-		
+		console.log("$. CHAT - loadChat chat:", chat)
 		if (chat) {
 			tags = await getTagsById(localStorage.token, $chatId).catch(async (error) => {
 				return [];
@@ -881,6 +882,8 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				console.log("$. CHAT - chatCompletedHandler - debug", $isConfidentialEnabled, isConfidentialEnabled, history)
+				history.is_confidential = $isConfidentialEnabled;
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -936,6 +939,7 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				history.is_confidential = $isConfidentialEnabled;
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -1836,6 +1840,7 @@
 		let _chatId = $chatId;
 
 		if (!$temporaryChatEnabled) {
+			history.is_confidential = $isConfidentialEnabled;
 			chat = await createNewChat(localStorage.token, {
 				id: _chatId,
 				title: $i18n.t('New Chat'),
@@ -1867,6 +1872,7 @@
 	const saveChatHandler = async (_chatId, history) => {
 		if ($chatId == _chatId) {
 			if (!$temporaryChatEnabled) {
+				history.is_confidential = $isConfidentialEnabled;
 				chat = await updateChatById(localStorage.token, _chatId, {
 					models: selectedModels,
 					history: history,

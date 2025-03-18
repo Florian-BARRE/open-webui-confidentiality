@@ -18,9 +18,8 @@
 		tools,
 		user as _user,
 		showControls,
-		TTSWorker,
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		isCurrentChatConfidential, isConfidentialEnable 
+		TTSWorker, 
+		isConfidentialEnabled
 	} from '$lib/stores';
 
 	import { blobToFile, compressImage, createMessagesList, findWordIndices } from '$lib/utils';
@@ -1236,12 +1235,12 @@
 													<button
 														on:click|preventDefault={
 															() => {
-																$isConfidentialEnable = !$isConfidentialEnable;
+																isConfidentialEnabled.set(!$isConfidentialEnabled);
 																console.log("Message Input History val:", history);
 															}
 														}
 														type="button"
-														class="px-1.5 @sm:px-2.5 py-1.5 flex gap-1.5 items-center text-sm rounded-full font-medium transition-colors duration-300 focus:outline-hidden max-w-full overflow-hidden {$isConfidentialEnable
+														class="px-1.5 @sm:px-2.5 py-1.5 flex gap-1.5 items-center text-sm rounded-full font-medium transition-colors duration-300 focus:outline-hidden max-w-full overflow-hidden {$isConfidentialEnabled
 														? 'bg-gray-100 dark:bg-gray-500/20 text-gray-600 dark:text-gray-400'
 														: 'bg-transparent text-gray-600 dark:text-gray-300 border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 '}"
 													>

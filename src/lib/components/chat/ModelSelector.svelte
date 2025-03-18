@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { 
-		models, showSettings, settings, user, mobile, config, 
-		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-		isCurrentChatConfidential, isConfidentialEnable 
-	} from '$lib/stores';
+	import { models, showSettings, settings, user, mobile, config, isConfidentialEnabled } from '$lib/stores';
 	import { onMount, tick, getContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import Selector from './ModelSelector/Selector.svelte';
@@ -62,8 +58,8 @@
 								}
 						
 								// Show model based on the confidentiality feature
-								if (is_confidential_model === $isConfidentialEnable) {		
-									console.log($isConfidentialEnable)	
+								if (is_confidential_model === $isConfidentialEnabled) {		
+									console.log($isConfidentialEnabled)	
 									return {
 										value: model.id,
 										label: model.name,

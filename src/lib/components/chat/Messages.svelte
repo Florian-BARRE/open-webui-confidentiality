@@ -7,7 +7,8 @@
 		user as _user,
 		mobile,
 		currentChatPage,
-		temporaryChatEnabled
+		temporaryChatEnabled,
+		isConfidentialEnabled
 	} from '$lib/stores';
 	import { tick, getContext, onMount, createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
@@ -97,6 +98,7 @@
 		if (!$temporaryChatEnabled) {
 			history = history;
 			await tick();
+			history.is_confidential = $isConfidentialEnabled;
 			await updateChatById(localStorage.token, chatId, {
 				history: history,
 				messages: messages

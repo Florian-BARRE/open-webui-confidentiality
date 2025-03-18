@@ -79,8 +79,7 @@ export const currentChatPage = writable(1);
 export const isLastActiveTab = writable(true);
 export const playingNotificationSound = writable(false);
 
-// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
-export const isConfidentialEnable = writable(false);
+export const isConfidentialEnabled = writable(false);
 export const isCurrentChatConfidential = writable(false);
 
 export type Model = OpenAIModel | OllamaModel;
