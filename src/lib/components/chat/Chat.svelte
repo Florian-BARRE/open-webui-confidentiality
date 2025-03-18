@@ -35,7 +35,9 @@
 		showOverview,
 		chatTitle,
 		showArtifacts,
-		tools
+		tools,
+		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+		isConfidentialEnable, isCurrentChatConfidential
 	} from '$lib/stores';
 	import {
 		convertMessagesToHistory,
@@ -124,7 +126,8 @@
 
 	let history = {
 		messages: {},
-		currentId: null
+		currentId: null,
+		is_confidential: false
 	};
 
 	let taskId = null;
@@ -709,7 +712,9 @@
 
 		history = {
 			messages: {},
-			currentId: null
+			currentId: null,
+			// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+			is_confidential: $isConfidentialEnable
 		};
 
 		chatFiles = [];
@@ -770,6 +775,8 @@
 
 		const chatInput = document.getElementById('chat-input');
 		setTimeout(() => chatInput?.focus(), 0);
+
+		console.log("$. CHAT - initNewChat:", history)
 	};
 
 	const loadChat = async () => {
@@ -778,7 +785,7 @@
 			await goto('/');
 			return null;
 		});
-
+		
 		if (chat) {
 			tags = await getTagsById(localStorage.token, $chatId).catch(async (error) => {
 				return [];
@@ -818,7 +825,7 @@
 					history.messages[history.currentId].done = true;
 				}
 				await tick();
-
+				console.log("$. CHAT - loadChat:", history)
 				return true;
 			} else {
 				return null;
@@ -832,6 +839,7 @@
 			messagesContainerElement.scrollTop = messagesContainerElement.scrollHeight;
 		}
 	};
+
 	const chatCompletedHandler = async (chatId, modelId, responseMessageId, messages) => {
 		const res = await chatCompleted(localStorage.token, {
 			model: modelId,
@@ -875,6 +883,9 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+				history.is_confidential = $isCurrentChatConfidential;
+
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -887,6 +898,8 @@
 				await chats.set(await getChatList(localStorage.token, $currentChatPage));
 			}
 		}
+
+		console.log("$. CHAT - chatCompletedHandler:", history)
 	};
 
 	const chatActionHandler = async (chatId, actionId, modelId, responseMessageId, event = null) => {
@@ -928,6 +941,9 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+				history.is_confidential = $isCurrentChatConfidential;
+
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -940,6 +956,8 @@
 				await chats.set(await getChatList(localStorage.token, $currentChatPage));
 			}
 		}
+
+		console.log("$. CHAT - chatActionHandler:", history)
 	};
 
 	const getChatEventEmitter = async (modelId: string, chatId: string = '') => {
@@ -1062,6 +1080,10 @@
 		}
 
 		history.currentId = currentParentId;
+
+		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+		history.is_confidential = $isConfidentialEnable;
+
 		await tick();
 
 		if (autoScroll) {
@@ -1073,6 +1095,8 @@
 		} else {
 			await saveChatHandler($chatId, history);
 		}
+
+		console.log("$. CHAT - addMessages:", history)
 	};
 
 	const chatCompletionEventHandler = async (data, message, chatId) => {
@@ -1169,6 +1193,9 @@
 			message.usage = usage;
 		}
 
+		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+		history.is_confidential = $isConfidentialEnable;
+
 		history.messages[message.id] = message;
 
 		if (done) {
@@ -1217,12 +1244,13 @@
 		if (autoScroll) {
 			scrollToBottom();
 		}
+
+		console.log("$. CHAT - chatCompletionEventHandler:", history)
 	};
 
 	//////////////////////////
 	// Chat functions
 	//////////////////////////
-
 	const submitPrompt = async (userPrompt, { _raw = false } = {}) => {
 		console.log('submitPrompt', userPrompt, $chatId);
 
@@ -1389,6 +1417,9 @@
 
 		_history = JSON.parse(JSON.stringify(history));
 		// Save chat after all messages have been created
+		
+		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+		_history.is_confidential = $isConfidentialEnable; // Add confidentiality to the chat history
 		await saveChatHandler(_chatId, _history);
 
 		await Promise.all(
@@ -1453,6 +1484,7 @@
 
 		currentChatPage.set(1);
 		chats.set(await getChatList(localStorage.token, $currentChatPage));
+		console.log('sendPrompt: ', _history);
 	};
 
 	const sendPromptSocket = async (_history, model, responseMessageId, _chatId) => {
@@ -1822,6 +1854,9 @@
 		let _chatId = $chatId;
 
 		if (!$temporaryChatEnabled) {
+			// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+			history.is_confidential = $isConfidentialEnable; // Add confidentiality to the chat history
+
 			chat = await createNewChat(localStorage.token, {
 				id: _chatId,
 				title: $i18n.t('New Chat'),
@@ -1831,7 +1866,7 @@
 				history: history,
 				messages: createMessagesList(history, history.currentId),
 				tags: [],
-				timestamp: Date.now()
+				timestamp: Date.now(),
 			});
 
 			_chatId = chat.id;
@@ -1853,6 +1888,9 @@
 	const saveChatHandler = async (_chatId, history) => {
 		if ($chatId == _chatId) {
 			if (!$temporaryChatEnabled) {
+				// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+				history.is_confidential = $isConfidentialEnable;
+				
 				chat = await updateChatById(localStorage.token, _chatId, {
 					models: selectedModels,
 					history: history,

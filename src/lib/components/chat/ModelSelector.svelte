@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { models, showSettings, settings, user, mobile, config } from '$lib/stores';
+	import { 
+		models, showSettings, settings, user, mobile, config, 
+		// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+		isCurrentChatConfidential, isConfidentialEnable 
+	} from '$lib/stores';
 	import { onMount, tick, getContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import Selector from './ModelSelector/Selector.svelte';
@@ -40,11 +44,38 @@
 					<Selector
 						id={`${selectedModelIdx}`}
 						placeholder={$i18n.t('Select a model')}
-						items={$models.map((model) => ({
-							value: model.id,
-							label: model.name,
-							model: model
-						}))}
+						
+						items={$models.map((model) => {
+								// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+								const prefix = model.name.split('.')[0]; 
+								let is_confidential_model = undefined;
+
+								if (prefix === 'confidential'){
+									is_confidential_model = true;
+								}
+								else if (prefix === 'non-confidential') {
+									is_confidential_model = false;
+								}
+								else {
+									//console.log('WARNING: Model ID does not contain confidentiality prefix:', model.id, model.name);
+									return undefined;
+								}
+						
+								// Show model based on the confidentiality feature
+								if (is_confidential_model === $isConfidentialEnable) {		
+									console.log($isConfidentialEnable)	
+									return {
+										value: model.id,
+										label: model.name,
+										model: model
+									};
+								}
+								// If the confidentiality mode does not match, return undefined (will be filtered out)
+								return undefined;
+							// Removes all `null` and `undefined` values
+							}).filter(Boolean) 
+						}
+						
 						showTemporaryChatControl={$user.role === 'user'
 							? ($user?.permissions?.chat?.temporary ?? true)
 							: true}
