@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { models, showSettings, settings, user, mobile, config, isConfidentialEnabled } from '$lib/stores';
-	import { onMount, tick, getContext } from 'svelte';
+	import { onMount, tick, getContext, onDestroy } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import Selector from './ModelSelector/Selector.svelte';
 	import Tooltip from '../common/Tooltip.svelte';
@@ -30,6 +30,18 @@
 			$models.map((m) => m.id).includes(model) ? model : ''
 		);
 	}
+	
+	// Dynamic update the current selected models (shown on the center of window, upper to chat input)
+	// Subscribe to the isConfidentialEnabled store
+	const unsubscribe = isConfidentialEnabled.subscribe(($isConfidentialEnabled) => {
+    	// If the confidential mode habe been updated, reset the selected models
+		selectedModels = [''];
+	});
+
+	// Unsubscribe when the component is destroyed to avoid memory leaks
+	onDestroy(() => {
+		unsubscribe();
+	});
 </script>
 
 <div class="flex flex-col w-full items-start">
@@ -40,9 +52,8 @@
 					<Selector
 						id={`${selectedModelIdx}`}
 						placeholder={$i18n.t('Select a model')}
-						
 						items={$models.map((model) => {
-								// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
+								// Extract the prefix from the model name to know if it is confidential or not
 								const prefix = model.name.split('.')[0]; 
 								let is_confidential_model = undefined;
 
