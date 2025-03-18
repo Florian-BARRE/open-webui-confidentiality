@@ -1226,27 +1226,7 @@
 														</button>
 													</Tooltip>
 												{/if}
-												<!-- 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality -->
-												<Tooltip content={$i18n.t('Confidential data')} placement="top">
-													<button
-														on:click|preventDefault={
-															() => {
-																$isConfidentialEnable = !$isConfidentialEnable;
-																console.log("Message Input History val:", history);
-															}
-														}
-														type="button"
-														class="px-1.5 @sm:px-2.5 py-1.5 flex gap-1.5 items-center text-sm rounded-full font-medium transition-colors duration-300 focus:outline-hidden max-w-full overflow-hidden {$isConfidentialEnable
-														? 'bg-gray-100 dark:bg-gray-500/20 text-gray-600 dark:text-gray-400'
-														: 'bg-transparent text-gray-600 dark:text-gray-300 border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 '}"
-													>
-														<Confidential className="size-5"/>
-														<span
-															class="hidden @sm:block whitespace-nowrap overflow-hidden text-ellipsis translate-y-[0.5px] mr-0.5"
-															>{$i18n.t('Confidential data')}</span
-														>
-													</button>
-												</Tooltip>
+
 											{/if}
 										</div>
 									</div>

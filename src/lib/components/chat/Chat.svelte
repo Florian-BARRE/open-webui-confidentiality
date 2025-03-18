@@ -125,7 +125,6 @@
 	let history = {
 		messages: {},
 		currentId: null,
-		is_confidential: false
 	};
 
 	let taskId = null;
@@ -879,6 +878,7 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				// $.$ ici maj des chats 
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -934,6 +934,7 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
+				// $.$ ici maj des chats 
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
 					messages: messages,
@@ -1834,6 +1835,7 @@
 		let _chatId = $chatId;
 
 		if (!$temporaryChatEnabled) {
+			// $.$ ici creation de chat, c'est le seul endroit de Chat.svelte qui fait ça
 			chat = await createNewChat(localStorage.token, {
 				id: _chatId,
 				title: $i18n.t('New Chat'),
@@ -1865,6 +1867,7 @@
 	const saveChatHandler = async (_chatId, history) => {
 		if ($chatId == _chatId) {
 			if (!$temporaryChatEnabled) {
+				// $.$ ici update de chat
 				chat = await updateChatById(localStorage.token, _chatId, {
 					models: selectedModels,
 					history: history,

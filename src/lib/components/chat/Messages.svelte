@@ -97,6 +97,7 @@
 		if (!$temporaryChatEnabled) {
 			history = history;
 			await tick();
+			// $.$ ici maj des chats
 			await updateChatById(localStorage.token, chatId, {
 				history: history,
 				messages: messages
