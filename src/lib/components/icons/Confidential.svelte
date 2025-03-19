@@ -6,7 +6,7 @@
   
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    fill="#ffffff"
+    fill="currentColor"
     width="800px"
     height="800px"
     version="1.1"

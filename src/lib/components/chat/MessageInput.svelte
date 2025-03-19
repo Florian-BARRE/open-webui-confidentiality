@@ -1185,36 +1185,29 @@
 												<!-- 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality -->  						  
 												<Tooltip content={'Données confidentielles'} placement="top">
 													<button
-														on:click|preventDefault={
-															() => {
-																// Update isConfidentialEnabled: 2 cases
-																// 1. The user does not have started the conversation yet or conversation started but confidential mode disable (history.is_confidential is false or undefined)
-																// => Toggle authorized
-																if (history.is_confidential === undefined || history.is_confidential === false)
-																{
-																	isConfidentialEnabled.set(!$isConfidentialEnabled);
-																}
-																// 2. The user has started the conversation and confidential mode is enabled (history.is_confidential is true)
-																// => Toggle unauthorized
-																else if (history.is_confidential === true)
-																{
-																	toast.error('Vous ne pouvez pas désactiver le mode confidentiel car la conversation contient des données confidentielles.');
-																}
-															}
-														}
-														type="button"
-														class="px-1.5 @sm:px-2.5 py-1.5 flex gap-1.5 items-center text-sm rounded-full font-medium transition-colors duration-300 ease-in-out focus:outline-hidden max-w-full overflow-hidden 
-														{ 	$isConfidentialEnabled
-															? 'bg-[rgba(72,187,120,0.7)] text-green-800 border-2 border-green-400 hover:bg-[rgba(72,187,120,0.7)] dark:text-white dark:border-[rgba(72,187,120,0.9)] dark:hover:bg-green-600' 
-															: 'bg-transparent text-gray-600 dark:text-gray-300 border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
-														}"
-														>
-														<Confidential className="size-5"/>
-														<span
-															class="hidden @sm:block whitespace-nowrap overflow-hidden text-ellipsis translate-y-[0.5px] mr-0.5"
-															>{'Données confidentielles'}</span
-														>
-													</button>
+													on:click|preventDefault={ () => {
+													  // Update isConfidentialEnabled: 2 cases
+													  if (history.is_confidential === undefined || history.is_confidential === false) {
+														isConfidentialEnabled.set(!$isConfidentialEnabled);
+													  } else if (history.is_confidential === true) {
+														toast.error('Vous ne pouvez pas désactiver le mode confidentiel car la conversation contient des données confidentielles.');
+													  }
+													}}
+													type="button"
+													class="px-1.5 @sm:px-2.5 py-1.5 flex gap-1.5 items-center text-sm rounded-full font-medium transition-colors duration-300 focus:outline-hidden max-w-full overflow-hidden 
+													  {$isConfidentialEnabled
+													  ? 'bg-gray-100 dark:bg-gray-500/20 text-green-400 dark:text-green-400'
+													  : 'bg-transparent text-gray-600 dark:text-gray-300 border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'}"
+												  	>
+													<Confidential class="size-5" />
+													<span
+													  class="hidden @sm:block whitespace-nowrap overflow-hidden text-ellipsis translate-y-[0.5px] mr-0.5"
+													>
+													  {'Données confidentielles'}
+													</span>
+												  </button>
+												  
+
 												</Tooltip>
 
 												{#if $config?.features?.enable_web_search && ($_user.role === 'admin' || $_user?.permissions?.features?.web_search)}
