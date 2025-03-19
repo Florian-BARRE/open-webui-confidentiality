@@ -70,7 +70,6 @@
 						
 								// Show model based on the confidentiality feature
 								if (is_confidential_model === $isConfidentialEnabled) {		
-									console.log($isConfidentialEnabled)	
 									return {
 										value: model.id,
 										label: model.name,

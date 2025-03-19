@@ -46,7 +46,6 @@
 	import PhotoSolid from '../icons/PhotoSolid.svelte';
 	import Photo from '../icons/Photo.svelte';
 	import CommandLine from '../icons/CommandLine.svelte';
-	// 🔒 Update for the "Open-WebUI-Confidentiality" feature confidentiality
 	import Confidential from '../icons/Confidential.svelte';
 
 	import { KokoroWorker } from '$lib/workers/KokoroWorker';
@@ -1189,6 +1188,7 @@
 													  // Update isConfidentialEnabled: 2 cases
 													  if (history.is_confidential === undefined || history.is_confidential === false) {
 														isConfidentialEnabled.set(!$isConfidentialEnabled);
+														toast.success('Mode confidentiel activé. Un modèle local sera utilisé pour répondre à votre demande.');
 													  } else if (history.is_confidential === true) {
 														toast.error('Vous ne pouvez pas désactiver le mode confidentiel car la conversation contient des données confidentielles.');
 													  }

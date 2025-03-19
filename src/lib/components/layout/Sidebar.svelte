@@ -78,6 +78,8 @@
 
 	let folders = {};
 
+	let enrichedChats = [];
+
 	const initFolders = async () => {
 		const folderList = await getFolders(localStorage.token).catch((error) => {
 			toast.error(`${error}`);
@@ -172,6 +174,17 @@
 		} else {
 			await chats.set(await getChatList(localStorage.token, $currentChatPage));
 		}
+
+		// Enrich the chat list with additional information
+		enrichedChats = await Promise.all(
+			($chats ? $chats : []).map(async (chat) => {
+				const enrichedChat = await getChatById(localStorage.token, chat.id).catch((error) => {
+					return null;
+				});
+
+				return enrichedChat;
+			})
+		);
 
 		// Enable pagination
 		scrollPaginationEnabled.set(true);
@@ -802,7 +815,7 @@
 				<div class=" flex-1 flex flex-col overflow-y-auto scrollbar-hidden">
 					<div class="pt-1.5">
 						{#if $chats}
-							{#each $chats as chat, idx}
+							{#each enrichedChats as chat, idx}
 								{#if idx === 0 || (idx > 0 && chat.time_range !== $chats[idx - 1].time_range)}
 									<div
 										class="w-full pl-2.5 text-xs text-gray-500 dark:text-gray-500 font-medium {idx ===
@@ -812,30 +825,29 @@
 									>
 										{$i18n.t(chat.time_range)}
 										<!-- localisation keys for time_range to be recognized from the i18next parser (so they don't get automatically removed):
-							{$i18n.t('Today')}
-							{$i18n.t('Yesterday')}
-							{$i18n.t('Previous 7 days')}
-							{$i18n.t('Previous 30 days')}
-							{$i18n.t('January')}
-							{$i18n.t('February')}
-							{$i18n.t('March')}
-							{$i18n.t('April')}
-							{$i18n.t('May')}
-							{$i18n.t('June')}
-							{$i18n.t('July')}
-							{$i18n.t('August')}
-							{$i18n.t('September')}
-							{$i18n.t('October')}
-							{$i18n.t('November')}
-							{$i18n.t('December')}
-							-->
+											{$i18n.t('Today')}
+											{$i18n.t('Yesterday')}
+											{$i18n.t('Previous 7 days')}
+											{$i18n.t('Previous 30 days')}
+											{$i18n.t('January')}
+											{$i18n.t('February')}
+											{$i18n.t('March')}
+											{$i18n.t('April')}
+											{$i18n.t('May')}
+											{$i18n.t('June')}
+											{$i18n.t('July')}
+											{$i18n.t('August')}
+											{$i18n.t('September')}
+											{$i18n.t('October')}
+											{$i18n.t('November')}
+											{$i18n.t('December')}
+										-->
 									</div>
 								{/if}
-
 								<ChatItem
-									className=""
+									className="-my-3 -py-3 -mt-3 -mb-3"
 									id={chat.id}
-									title={chat.title}
+									title={chat?.chat?.history?.is_confidential === true ? `🔒 - ${chat.title}` : chat.title}
 									{shiftKey}
 									selected={selectedChatId === chat.id}
 									on:select={() => {
@@ -851,7 +863,7 @@
 										const { type, name } = e.detail;
 										tagEventHandler(type, name, chat.id);
 									}}
-								/>
+								/>	
 							{/each}
 
 							{#if $scrollPaginationEnabled && !allChatsLoaded}

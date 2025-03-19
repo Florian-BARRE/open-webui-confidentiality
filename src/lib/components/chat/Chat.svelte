@@ -774,8 +774,6 @@
 
 		const chatInput = document.getElementById('chat-input');
 		setTimeout(() => chatInput?.focus(), 0);
-
-		console.log("$. CHAT - initNewChat:", history)
 	};
 
 	const loadChat = async () => {
@@ -784,7 +782,7 @@
 			await goto('/');
 			return null;
 		});
-		console.log("$. CHAT - loadChat chat:", chat)
+
 		if (chat) {
 			tags = await getTagsById(localStorage.token, $chatId).catch(async (error) => {
 				return [];
@@ -824,7 +822,7 @@
 					history.messages[history.currentId].done = true;
 				}
 				await tick();
-				console.log("$. CHAT - loadChat:", history)
+
 				return true;
 			} else {
 				return null;
@@ -882,7 +880,6 @@
 
 		if ($chatId == chatId) {
 			if (!$temporaryChatEnabled) {
-				console.log("$. CHAT - chatCompletedHandler - debug", $isConfidentialEnabled, isConfidentialEnabled, history)
 				history.is_confidential = $isConfidentialEnabled;
 				chat = await updateChatById(localStorage.token, chatId, {
 					models: selectedModels,
@@ -896,8 +893,6 @@
 				await chats.set(await getChatList(localStorage.token, $currentChatPage));
 			}
 		}
-
-		console.log("$. CHAT - chatCompletedHandler:", history)
 	};
 
 	const chatActionHandler = async (chatId, actionId, modelId, responseMessageId, event = null) => {
@@ -953,7 +948,6 @@
 			}
 		}
 
-		console.log("$. CHAT - chatActionHandler:", history)
 	};
 
 	const getChatEventEmitter = async (modelId: string, chatId: string = '') => {
@@ -1088,7 +1082,6 @@
 			await saveChatHandler($chatId, history);
 		}
 
-		console.log("$. CHAT - addMessages:", history)
 	};
 
 	const chatCompletionEventHandler = async (data, message, chatId) => {
@@ -1233,8 +1226,6 @@
 		if (autoScroll) {
 			scrollToBottom();
 		}
-
-		console.log("$. CHAT - chatCompletionEventHandler:", history)
 	};
 
 	//////////////////////////
