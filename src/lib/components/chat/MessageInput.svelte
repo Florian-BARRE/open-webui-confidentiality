@@ -331,10 +331,12 @@
 		dropzoneElement?.addEventListener('dragleave', onDragLeave);
 
 		// Update the confidentiality bouton based on history.is_confidential value
-		if (history?.is_confidential === undefined || history?.is_confidential === false) {
-			isConfidentialEnabled.set(false);
-		} else {
-			isConfidentialEnabled.set(true);
+		if (!$isConfidentialEnabled){
+			if (history?.is_confidential === undefined || history?.is_confidential === false) {
+				isConfidentialEnabled.set(false);		
+			} else {
+				isConfidentialEnabled.set(true);
+			}
 		}
 	});
 

@@ -822,7 +822,7 @@
 					history.messages[history.currentId].done = true;
 				}
 				await tick();
-
+				console.log("loadChat", history);
 				return true;
 			} else {
 				return null;
@@ -1342,6 +1342,7 @@
 	) => {
 		let _chatId = JSON.parse(JSON.stringify($chatId));
 		_history = JSON.parse(JSON.stringify(_history));
+		_history.is_confidential = $isConfidentialEnabled;
 
 		const responseMessageIds: Record<PropertyKey, string> = {};
 		// If modelId is provided, use it, else use selected model
@@ -1462,6 +1463,7 @@
 		currentChatPage.set(1);
 		chats.set(await getChatList(localStorage.token, $currentChatPage));
 		console.log('sendPrompt: ', _history);
+	
 	};
 
 	const sendPromptSocket = async (_history, model, responseMessageId, _chatId) => {
