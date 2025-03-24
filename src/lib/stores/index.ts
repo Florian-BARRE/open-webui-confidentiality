@@ -80,7 +80,6 @@ export const isLastActiveTab = writable(true);
 export const playingNotificationSound = writable(false);
 
 export const isConfidentialEnabled = writable(false);
-export const isCurrentChatConfidential = writable(false);
 
 export type Model = OpenAIModel | OllamaModel;
 

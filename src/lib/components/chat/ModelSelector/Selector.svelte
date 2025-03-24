@@ -19,10 +19,12 @@
 		mobile,
 		temporaryChatEnabled,
 		settings,
-		config
+		config,
+		isConfidentialEnabled
 	} from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 	import { capitalizeFirstLetter, sanitizeResponseContent, splitStream } from '$lib/utils';
+	import { isModelConfidential } from '$lib/utils/confidentiality'; 
 	import { getModels } from '$lib/apis';
 
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
@@ -58,7 +60,10 @@
 	let tags = [];
 
 	let selectedModel = '';
-	$: selectedModel = items.find((item) => item.value === value) ?? '';
+	
+	$: selectedModel = items.find(
+		(item) => isModelConfidential(item.model) === $isConfidentialEnabled
+	) ?? '';
 
 	let searchValue = '';
 	let selectedTag = '';

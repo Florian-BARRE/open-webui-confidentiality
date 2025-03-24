@@ -1463,10 +1463,10 @@
 		currentChatPage.set(1);
 		chats.set(await getChatList(localStorage.token, $currentChatPage));
 		console.log('sendPrompt: ', _history);
-	
 	};
 
 	const sendPromptSocket = async (_history, model, responseMessageId, _chatId) => {
+		_history.is_confidential = $isConfidentialEnabled;
 		const responseMessage = _history.messages[responseMessageId];
 		const userMessage = _history.messages[responseMessage.parentId];
 

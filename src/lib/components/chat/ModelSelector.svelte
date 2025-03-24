@@ -6,6 +6,7 @@
 	import Tooltip from '../common/Tooltip.svelte';
 
 	import { updateUserSettings } from '$lib/apis/users';
+	import { isModelConfidential, extractModelName } from '$lib/utils/confidentiality';
 	const i18n = getContext('i18n');
 
 	export let selectedModels = [''];
@@ -53,31 +54,25 @@
 						id={`${selectedModelIdx}`}
 						placeholder={$i18n.t('Select a model')}
 						items={$models.map((model) => {
-								// Extract the prefix from the model name to know if it is confidential or not
-								const prefix = model.name.split('.')[0]; 
-								let is_confidential_model = undefined;
+								let is_confidential_model = isModelConfidential(model);
 
-								if (prefix === 'confidential'){
-									is_confidential_model = true;
-								}
-								else if (prefix === 'non-confidential') {
-									is_confidential_model = false;
-								}
-								else {
-									//console.log('WARNING: Model ID does not contain confidentiality prefix:', model.id, model.name);
-									return undefined;
-								}
-						
 								// Show model based on the confidentiality feature
 								if (is_confidential_model === $isConfidentialEnabled) {		
 									return {
 										value: model.id,
-										label: model.name,
+										label: extractModelName(model, is_confidential_model),
 										model: model
 									};
 								}
+
+								if (is_confidential_model === undefined)
+								{
+									console.warn(' Model ID does not contain confidentiality prefix:', model);
+								}
+
 								// If the confidentiality mode does not match, return undefined (will be filtered out)
 								return undefined;
+
 							// Removes all `null` and `undefined` values
 							}).filter(Boolean) 
 						}

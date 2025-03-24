@@ -1188,16 +1188,18 @@
 													<button
 													on:click|preventDefault={ () => {
 													  // Update isConfidentialEnabled: 2 cases
-													  if (history.is_confidential === undefined || history.is_confidential === false) {
+													  const isRequestInProgress = history.currentId && !history.messages[history.currentId]?.done;
+
+													  if (!(isRequestInProgress === true) && (history.is_confidential === undefined || history.is_confidential === false)) {
 														isConfidentialEnabled.set(!$isConfidentialEnabled);
-														
+														 
 														if ($isConfidentialEnabled) {
 														  toast.success('Le mode confidentiel est activé.');
 														}
 														else if (!$isConfidentialEnabled) {
 														  toast.success('Le mode confidentiel est désactivé.');
 														}
-													  } else if (history.is_confidential === true) {
+													  } else if (history.is_confidential === true || $isConfidentialEnabled === true) {
 														toast.error('Vous ne pouvez pas désactiver le mode confidentiel car la conversation contient des données confidentielles.');
 													  }
 													}}
