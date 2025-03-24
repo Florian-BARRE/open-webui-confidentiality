@@ -816,7 +816,7 @@
 					<div class="pt-1.5">
 						{#if $chats}
 							{#each enrichedChats as chat, idx}
-								{#if idx === 0 || (idx > 0 && chat.time_range !== $chats[idx - 1].time_range)}
+								{#if idx === 0 || (idx > 0 && chat.time_range !== enrichedChats[idx - 1]?.time_range)}
 									<div
 										class="w-full pl-2.5 text-xs text-gray-500 dark:text-gray-500 font-medium {idx ===
 										0
@@ -845,7 +845,7 @@
 									</div>
 								{/if}
 								<ChatItem
-									className="-my-3 -py-3 -mt-3 -mb-3"
+									className=""
 									id={chat.id}
 									title={chat?.chat?.history?.is_confidential === true ? `🔒 - ${chat.title}` : chat.title}
 									{shiftKey}

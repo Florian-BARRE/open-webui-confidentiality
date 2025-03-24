@@ -63,10 +63,17 @@
 	let selectedModelIdx = 0;
 	
 	$: {
-		// Find the default selected model
-		const selectedItem = items.find(
-			(item) => isModelConfidential(item.model) === $isConfidentialEnabled
+		// Find the selected model
+		let selectedItem = items.find(
+			(item) => item.value === value
 		) ?? null;
+		
+		// If no model is found, find the first model that matches the confidentiality setting
+		if (selectedItem === null) {
+			selectedItem = items.find(
+				(item) => $isConfidentialEnabled === isModelConfidential(item.model)
+			) ?? null;
+		}
 
 		// If a model is found, update `selectedModel`, `value`, and `selectedModelIdx`
 		if (selectedItem) {
