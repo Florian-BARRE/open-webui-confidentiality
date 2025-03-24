@@ -60,17 +60,31 @@
 	let tags = [];
 
 	let selectedModel = '';
+	let selectedModelIdx = 0;
 	
-	$: selectedModel = items.find(
-		(item) => isModelConfidential(item.model) === $isConfidentialEnabled
-	) ?? '';
+	$: {
+		// Find the default selected model
+		const selectedItem = items.find(
+			(item) => isModelConfidential(item.model) === $isConfidentialEnabled
+		) ?? null;
+
+		// If a model is found, update `selectedModel`, `value`, and `selectedModelIdx`
+		if (selectedItem) {
+			selectedModel = selectedItem;
+			value = selectedItem.value;
+			selectedModelIdx = items.indexOf(selectedItem); // Get the correct index
+		} else {
+			// Reset values if no model is found
+			selectedModel = null;
+			value = '';
+			selectedModelIdx = -1;
+		}
+	}
 
 	let searchValue = '';
 	let selectedTag = '';
 
 	let ollamaVersion = null;
-
-	let selectedModelIdx = 0;
 
 	const fuse = new Fuse(
 		items.map((item) => {
