@@ -94,7 +94,6 @@
 	let selectedConnectionType = '';
 
 	let ollamaVersion = null;
-	let selectedModelIdx = 0;
 
 	const fuse = new Fuse(
 		items.map((item) => {
